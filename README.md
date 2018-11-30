@@ -95,6 +95,54 @@ This is intented to bridge Alerts from a Prometheus running in k8s into an AppD 
 
 This solution is a small custom golang module to receive the Prometeus POST, transform the format, and then POST the solution to APM.  This will be packaged as a k8s service.  The pod definition for this service will include the AppD Machine Agent as well as this module.  When deployed into k8s it will be a highly available service to bridge Prometheus Alerts into AppD.
 
+## Message Mapping
+
+Prometheus source Alert:
+
+```
+{
+  "version": "4",
+  "groupKey": <string>,    // key identifying the group of alerts (e.g. to deduplicate)
+  "status": "<resolved|firing>",
+  "receiver": <string>,
+  "groupLabels": <object>,
+  "commonLabels": <object>,
+  "commonAnnotations": <object>,
+  "externalURL": <string>,  // backlink to the Alertmanager.
+  "alerts": [
+    {
+      "status": "<resolved|firing>",
+      "labels": <object>,
+      "annotations": <object>,
+      "startsAt": "<rfc3339>",
+      "endsAt": "<rfc3339>",
+      "generatorURL": <string> // identifies the entity that caused the alert
+    },
+    ...
+  ]
+}
+```
+
+APM Input Event:
+
+```
+POST /api/v1/events  
+[
+  {
+    "eventSeverity": <event_severity>,
+    "type": "<event_type>",
+    "summaryMessage": "<event_summary>",
+    "properties": {
+      "<key>": {
+        <user-specified_object>
+      },...
+    },
+    "details": {
+      "<key>": "<value>"
+    }
+  }]
+```
+
 
 
 
