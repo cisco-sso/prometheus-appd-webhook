@@ -2,6 +2,48 @@
 
 ## Work in Progress
 
+## Problem Statement
+
+We have a support team that does L1 support for a huge range of legacy, brown field and green field software solutions.  They use AppDynamics (AppD) across the whole portfolio.  The cutting edge of our green field efforts is services deployed in kubernetes (k8s) monitored by Prometheus (P*).  Since AppD lacks a cloud API to push alerts to it, we need to "bridge" Alerts from Prometheus into an AppD APM running outside k8s.  
+
+## Solution Summary
+
+This solution - which we are calling "pushAppD" - is a small custom golang module to receive the Prometeus POST, transform the format, and then POST the solution to APM.  This will be packaged as a k8s service.  The pod definition for this service will include the relatively heavy AppD Machine Agent as well as this module.  When deployed into k8s it will be a highly available service to bridge Prometheus Alerts into AppD.
+
+## Deployment Model
+
+### Block Diagram
+
+```plantuml
+package "Kubernetes" {
+  [Services]
+  [Prometheus] --> POST1 
+  POST1 --> [pushAppD] 
+}
+ 
+node "AppD" {
+  POST2 -> [APM ]
+ } 
+
+[pushAppD] --> [POST2] 
+
+
+```
+  
+
+### Sequence Diagram
+
+```plantuml
+Prometheus -> "pushAppD" : POST1
+"pushAppD" -> "Prometheus" : OK
+
+"pushAppD" -> "APM" : POST2
+"APM" -> "pushAppD" : OK
+@enduml
+```
+
+
+
 ### Theory of Operation
 
 This effort aims to take configured alert flow from Prometheus AlertManager and forward it on to Application Dynamics (AppD) APM for further processing.
@@ -89,15 +131,10 @@ POST /api/v1/events
 ]
 ```
 
-## Deployment Model
-
-This is intented to bridge Alerts from a Prometheus running in k8s into an AppD APM running outside k8s.  We need to host a relatively heavy AppD Machine Agent as well as a means to translate the POST from Prometheus into a POST to the Machine Agent.
-
-This solution is a small custom golang module to receive the Prometeus POST, transform the format, and then POST the solution to APM.  This will be packaged as a k8s service.  The pod definition for this service will include the AppD Machine Agent as well as this module.  When deployed into k8s it will be a highly available service to bridge Prometheus Alerts into AppD.
 
 ## Message Mapping
 
-Prometheus source Alert:
+Prometheus source Alert (POST1):
 
 ```
 {
@@ -123,7 +160,7 @@ Prometheus source Alert:
 }
 ```
 
-APM Input Event:
+APM Input Event (POST2):
 
 ```
 POST /api/v1/events  
