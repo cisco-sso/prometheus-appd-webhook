@@ -53,7 +53,7 @@ The Alertmanager will send HTTP POST requests in the following JSON format to th
 
 On the APM side, alerts will be received by the APM controller.  Since APM does not expose a cloud API, the only way to get alerts into APM is via the [Standalone Machine Agent HTTP Listener](https://docs.appdynamics.com/display/PRO44/Standalone+Machine+Agent+HTTP+Listener) "Create Events" API.  Specifically:
 
-#####Create Events
+###Create Events
 
 Use to post custom events to the Machine Agent for uploading to the Controller. Define one or more events in the body of the request as JSON data. Example:
 
