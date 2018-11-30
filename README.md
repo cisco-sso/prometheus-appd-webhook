@@ -14,34 +14,12 @@ This solution - which we are calling "pushAppD" - is a small custom golang modul
 
 ### Block Diagram
 
-```plantuml
-package "Kubernetes" {
-  [Services]
-  [Prometheus] --> POST1 
-  POST1 --> [pushAppD] 
-}
- 
-node "AppD" {
-  POST2 -> [APM ]
- } 
 
-[pushAppD] --> [POST2] 
-
-
-```
-  
+![Block Diagram](block-diagram.png)
 
 ### Sequence Diagram
 
-```plantuml
-Prometheus -> "pushAppD" : POST1
-"pushAppD" -> "Prometheus" : OK
-
-"pushAppD" -> "APM" : POST2
-"APM" -> "pushAppD" : OK
-@enduml
-```
-
+![Sequence Diagram](sequence.png)
 
 
 ### Theory of Operation

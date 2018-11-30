@@ -1,0 +1,8 @@
+@startuml
+Prometheus -> "pushAppD" : POST1
+"pushAppD" -> "Prometheus" : OK
+
+"pushAppD" -> "APM" : POST2
+"APM" -> "pushAppD" : OK
+@enduml
+

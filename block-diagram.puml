@@ -1,0 +1,14 @@
+@startuml
+package "Kubernetes" {
+  [Services]
+  [Prometheus] --> POST1 
+  POST1 --> [pushAppD] 
+}
+ 
+node "AppD" {
+  POST2 -> [APM ]
+ } 
+
+[pushAppD] --> [POST2] 
+
+@enduml
