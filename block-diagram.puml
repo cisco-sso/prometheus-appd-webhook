@@ -1,16 +1,19 @@
 @startuml
-package "Kubernetes" {
-  [Services]
-  [Prometheus] --> POST1 
-  POST1 --> [pushAppD] 
-  [AppD Machine Agent]
+frame "kubernetes" {
+   node "Services" {
+   }
+   node "Prometheus" {
+     [AlertManager] -> POST1 
+   }  
+   node "pushAppD Container" {
+     [go module]  -> POST2
+     POST2 -> [AppD Machine Agent]
+    }
 }
- 
-
 node "AppD" {
-  POST2 -> [APM ]
- } 
+  POST3 -> [APM ]
+} 
 
-[AppD Machine Agent] --> [POST2] 
-
+POST1 --> [go module] 
+[AppD Machine Agent] --> [POST3] 
 @enduml
