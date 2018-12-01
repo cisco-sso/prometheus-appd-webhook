@@ -33,18 +33,11 @@ Whether or not to notify about resolved alerts.
 ```
 [ send_resolved: <boolean> | default = true ]
 ```
-The endpoint to send HTTP POST requests to.  
+The endpoint to send HTTP POST requests to.  This will be the pushAppD service URL.  
 
 ```
 url: <string>
 ```
-
-The HTTP client's configuration.  
-
-```
-[ http_config: <http_config> | default = global.http_config ]
-```
-
 The Alertmanager will send HTTP POST requests in the following JSON format to the configured endpoint:  
 
 ```
@@ -71,11 +64,8 @@ The Alertmanager will send HTTP POST requests in the following JSON format to th
 }
 ```
 
-On the APM side, alerts will be received by the APM controller.  Since APM does not expose a cloud API, the only way to get alerts into APM is via the [Standalone Machine Agent HTTP Listener](https://docs.appdynamics.com/display/PRO44/Standalone+Machine+Agent+HTTP+Listener) "Create Events" API.  Specifically:
-
-### Create Events
-
-Use to post custom events to the Machine Agent for uploading to the Controller. Define one or more events in the body of the request as JSON data. Example:
+The pushAppD service will transform the ALERT into an EVENT and deliver it to the local Machine Agent via POST.
+We do this because the AppD APM does not expose a cloud API, the only way to get alerts into APM is via the [Standalone Machine Agent HTTP Listener](https://docs.appdynamics.com/display/PRO44/Standalone+Machine+Agent+HTTP+Listener) "Create Events" API.  Specifically:
 
 ```
 POST /api/v1/events  
@@ -109,10 +99,11 @@ POST /api/v1/events
 ]
 ```
 
-
 ## Message Mapping
 
-Prometheus source Alert (POST1):
+WORK TO BE DONE!  We must make a list of the ALERTS coming from P* and "map" them to EVENTS we want to send to AppD.
+
+Prometheus ALERT (called POST1):
 
 ```
 {
@@ -138,7 +129,7 @@ Prometheus source Alert (POST1):
 }
 ```
 
-APM Input Event (POST2):
+Machine Agent EVENT (called POST2):
 
 ```
 POST /api/v1/events  
@@ -159,5 +150,6 @@ POST /api/v1/events
 ```
 
 
+Note that the Machine Agenet will POST all events to the AppD APM just like usual.  The Machine Agent must be properly configured to point to the APM backend.  These actions we call POST3 and they are opaque to us.  We are using the Local Machine Agent only for transport into APM.
 
 
