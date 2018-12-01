@@ -1,11 +1,13 @@
-BIN := ~/plantuml/plantuml.jar
-MD  := ./README.md
+BIN     := ~/plantuml/plantuml.jar
+MD      := ./README.md
+PNG_SRC := block-diagram.md sequence.md
 
 pdf: refresh
 	markdown-pdf ${MD}
 
 refresh: ${BIN}
-	-rm -Rf *.png
+	-rm -Rf *.png *.puml
+	$(foreach file,${PNG_SRC},sed -e '$$ d' $(file) | sed -e '1d' > $(file).puml;)
 	java -jar ${BIN} *.puml
 
 download: ${BIN}

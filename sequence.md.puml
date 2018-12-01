@@ -14,4 +14,3 @@ note right: "AppD format"
 note right: "normal behavior - transparent to us"
 APM ->  "AppD Machine Agent" : OK
 @enduml
-
