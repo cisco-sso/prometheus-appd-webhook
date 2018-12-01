@@ -3,12 +3,14 @@ package "Kubernetes" {
   [Services]
   [Prometheus] --> POST1 
   POST1 --> [pushAppD] 
+  [AppD Machine Agent]
 }
  
+
 node "AppD" {
   POST2 -> [APM ]
  } 
 
-[pushAppD] --> [POST2] 
+[AppD Machine Agent] --> [POST2] 
 
 @enduml

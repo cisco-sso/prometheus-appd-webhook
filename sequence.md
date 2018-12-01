@@ -1,3 +1,4 @@
+```plantuml
 @startuml
 AlertManager -> pushAppD : POST1
 note left: "P* format"
@@ -14,4 +15,4 @@ note right: "AppD format"
 note right: "normal behavior - transparent to us"
 APM ->  "AppD Machine Agent" : OK
 @enduml
-
+```
