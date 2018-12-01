@@ -152,4 +152,9 @@ POST /api/v1/events
 
 Note that the Machine Agenet will POST all events to the AppD APM just like usual.  The Machine Agent must be properly configured to point to the APM backend.  These actions we call POST3 and they are opaque to us.  We are using the Local Machine Agent only for transport into APM.
 
+## Contributing Documentation
+
+If you want to edit and contribute, clone the repo locally and then you can edit the markdown as usual, or edit the diagrams in [plantuml](http://plantuml.com/) format embedded into Markdown files.  We recommend using Visual Studio Code (free) with the [jebbs plantuml](https://marketplace.visualstudio.com/items?itemName=jebbs.plantuml) extension.  You can then preview your edits live.  
+
+The Makefile does the tricky parts – sorry, only works on a Mac.  Untested on windoze.  Just do a “make install” once to install the needed tools and then after your edits do “make” and you should get everything happy.  The Makefile will use the tooling you installed to convert the plantuml markdown files into vanilla puml files and then into png files that are used in the main markdown files.  This trickery would not be needed if GitHub would support plantuml natively!
 
