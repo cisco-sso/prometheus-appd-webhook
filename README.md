@@ -158,3 +158,7 @@ If you want to edit and contribute, clone the repo locally and then you can edit
 
 The Makefile does the tricky parts – sorry, only works on a Mac.  Untested on windoze.  Just do a “make install” once to install the needed tools and then after your edits do “make” and you should get everything happy.  The Makefile will use the tooling you installed to convert the plantuml markdown files into vanilla puml files and then into png files that are used in the main markdown files.  This trickery would not be needed if GitHub would support plantuml natively!
 
+## References
+
+[Blog post on writing a custom P* AlertManager webhook](https://medium.com/@zhimin.wen/custom-notifications-with-alert-managers-webhook-receiver-in-kubernetes-8e1152ba2c31)  
+[Git Repo for example P* AlertManager webhook](https://github.com/bakins/alertmanager-webhook-example)
