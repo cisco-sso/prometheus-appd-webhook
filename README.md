@@ -15,11 +15,11 @@ This solution - which we are calling "pushAppD" - is a small custom golang modul
 ### Block Diagram
 
 
-![Block Diagram](block-diagram.md.png)
+![Block Diagram](docs/block-diagram.png)
 
 ### Sequence Diagram
 
-![Sequence Diagram](sequence.md.png)
+![Sequence Diagram](docs/sequence-diagram.png)
 
 
 ### Theory of Operation
