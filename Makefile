@@ -1,28 +1,57 @@
-BIN     := ~/plantuml/plantuml.jar
-MD      := ./README.md
-PNG_SRC := block-diagram.md sequence.md
+.DEFAULT_GOAL = all
 
-pdf: refresh
-	markdown-pdf ${MD}
+# Base Variables
 
-refresh: ${BIN}
-	-rm -Rf *.png *.puml
-	$(foreach file,${PNG_SRC},sed -e '$$ d' $(file) | sed -e '1d' > $(file).puml;)
-	java -jar ${BIN} *.puml
+PUML_JAR := tmp/plantuml.jar
+PUML_JAR_URL := https://sourceforge.net/projects/plantuml/files/plantuml.jar/download
 
-download: ${BIN}
-	-mkdir ~/plantuml
-	wget -O ${BIN} http://sourceforge.net/projects/plantuml/files/plantuml.jar/download 
+## Soure Variables
 
+SRC_MD = $(wildcard *.md) $(wildcard docs/*.md)
+PDF_MD = $(SRC_MD:.md=.pdf)
 
-install: download
+SRC_PUML = $(wildcard docs/*.puml)
+PNG_PUML = $(SRC_PUML:.puml=.png)
+
+## Phony Targets
+
+.PHONY: all
+all: docs
+
+.PHONY: clean
+clean:
+	rm -rf ./tmp
+	rm -f $(PNG_PUML) $(PDF_MD)
+
+.PHONY: docs
+docs: $(PNG_PUML) $(PDF_MD)  # Render images before PDFs.
+
+.PHONY: install
+install: ${PUML_JAR}
 	brew cask install java
-	brew install libtool
-	brew install graphviz
+	brew install graphviz libtool node
 	npm install -g markdown-pdf
 
-clean:
-	-rm -Rf *~
+## Real Targets
 
-clean-all: clean
-	-rm -Rf *.png
+%.pdf: %.md $(PNG_PUML)
+	## The word parse is to gracefully ignore filenames that are
+	## transient dependencies.
+	markdown-pdf -o $@ $(word 1, $<)
+
+docs/%.pdf: docs/%.md $(PNG_PUML)
+	## We must cd into this directory because images embedded
+	## in markdown files use relative links.
+	##
+	## The word parse is to gracefully ignore filenames that are
+	## transient dependencies.
+	cd docs && markdown-pdf -o $(notdir $@) $(notdir $(word 1, $<))
+
+docs/%.png: docs/%.puml
+	java -jar ${PUML_JAR} $<
+
+tmp:
+	mkdir -p tmp
+
+${PUML_JAR}: tmp
+	curl -fsSL -o $@ ${PUML_JAR_URL}
